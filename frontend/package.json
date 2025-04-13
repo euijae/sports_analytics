@@ -7,7 +7,7 @@
     "build": "next build && next export",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "npm run build && gh-pages -d out"
+    "deploy": "npm run build && npm run export && cp -r out/* ../docs/"
   },
   "dependencies": {
     "chart.js": "^4.4.8",
