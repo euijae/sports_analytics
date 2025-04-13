@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "build": "next build",
-    "deploy": "next build && rm -rf ../docs && mkdir ../docs && cp -r out/* ../docs/"
+    "deploy": "next build && rm -rf ../docs && mkdir ../docs && cp -r out/* ../docs/ && touch ../docs/.nojekyll"
   },
   "dependencies": {
     "chart.js": "^4.4.8",
