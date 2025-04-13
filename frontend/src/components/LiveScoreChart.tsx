@@ -2,13 +2,13 @@
 'use client';
 
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend } from 'chart.js';
-import { Tick } from 'chart.js';
+import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend, ChartOptions, ScriptableScaleContext } from 'chart.js';
+// import { Tick } from 'chart.js';
 import { useEffect, useState } from 'react';
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Title, Tooltip, Legend);
 
-const generateLabels = () => Array.from({ length: 49 }, (_, i) => i); // 0–48 mins
+// const generateLabels = () => Array.from({ length: 49 }, (_, i) => i); // 0–48 mins
 
 export default function LiveScoreChart() {
   const [teamAScores, setTeamAScores] = useState<number[]>([]);
@@ -48,46 +48,38 @@ export default function LiveScoreChart() {
     ],
   };
 
-  const options = {
+  const options: ChartOptions<'line'> = {
     responsive: true,
     plugins: {
       title: {
         display: true,
-        text: 'Live NBA Score (By Minute)',
-      },
+        text: 'Live Score by Minute'
+      }
     },
     scales: {
       x: {
         title: {
           display: true,
-          text: 'Minute',
+          text: 'Minute'
         },
         ticks: {
-            callback: (
-              tickValue: string | number,
-              index: number,
-              ticks: Tick[]
-            ): string => {
-              const val = typeof tickValue === 'number' ? tickValue : parseInt(tickValue, 10);
-              return val % 12 === 0 ? `Q${val / 12 + 1}` : `${val}`;
-            }
+          callback: (tickValue: string | number) => `Min ${tickValue}`
         },
         grid: {
-          color: (context: any) => (context.tick.value % 12 === 0 ? '#999' : '#ddd'),
-          lineWidth: (context: any) => {
-            const value = context?.tick?.value;
-            return typeof value === 'number' && value % 12 === 0 ? 2 : 1;
-          }
-        },
+          color: (ctx: ScriptableScaleContext) =>
+            (ctx.tick?.value ?? 0) % 12 === 0 ? '#999' : '#ddd',
+          lineWidth: (ctx: ScriptableScaleContext) =>
+            typeof ctx.tick?.value === 'number' && ctx.tick.value % 12 === 0 ? 2 : 1
+        }
       },
       y: {
         title: {
           display: true,
-          text: 'Score',
+          text: 'Score'
         },
-        beginAtZero: true,
-      },
-    },
+        beginAtZero: true
+      }
+    }
   };
 
   return <Line data={data} options={options} />;
